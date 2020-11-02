@@ -12,7 +12,6 @@ int main(int argc, char* argv[])
     {
         textPath = argv[1];
         dictionaryPath = argv[2];
-        cout << textPath << endl << dictionaryPath;
     }
     else 
     {
@@ -25,11 +24,10 @@ int main(int argc, char* argv[])
     }
 
 
-    vector<string> text; // Текст
-    vector<string> dictionary; // Текст
-    vector<string> ErrorsList; // Ошибки
+    vector<string> text; // Исходный текст для транслитерации
+    vector<string> dictionary; // Словарь для транслитерации
+    vector<string> ErrorsList; // Массив строк с ошибками
 
-    //Проверка чтения файла
     readText(textPath, text, ErrorsList); // Чтение текста
 
     readDictionary(dictionaryPath, dictionary, ErrorsList); // Чтение словаря
@@ -41,10 +39,11 @@ int main(int argc, char* argv[])
 
 bool readDictionary(string& dictionaryPath, vector<string>& dictionary, vector<string>& ErrorsList)
 {
-    ifstream fDict(dictionaryPath); // Создаем файл для записи текста
+    ifstream fDict(dictionaryPath); // Открываем файл для записи текста
     if (!fDict)
     {
         ErrorsList.push_back("Ошибка открытия файла словаря" + dictionaryPath + "файл не существует или недостаточно прав доступа для его открытия");
+        return false;
     }
     else
     {
@@ -62,12 +61,13 @@ bool checkRepetition(vector<string>& dictionary, vector<string>& ErrorsList)
     return false;
 }
 
-void readText(string& textPath, vector<string>& text, vector<string>& ErrorsList)
+bool readText(string& textPath, vector<string>& text, vector<string>& ErrorsList)
 {
     ifstream fText(textPath); // Считываем файл для записи текста
     if (!fText)
     {
         ErrorsList.push_back("Ошибка открытия файла текста" + textPath + "файл не существует или недостаточно прав доступа для его открытия");
+        return false;
     }
     else
     {
@@ -77,6 +77,7 @@ void readText(string& textPath, vector<string>& text, vector<string>& ErrorsList
             text.push_back(tmp);
         }
     }
+    return true;
 }
 
 bool transliterationOfText(vector<string> &text, vector<string>& dictionary)
@@ -115,21 +116,30 @@ bool transliterationOfText(vector<string> &text, vector<string>& dictionary)
 
 void writeFile(vector<string>& transText, string textPath, vector<string>& ErrorsList)
 {
-    ofstream fin("Result" + textPath); // Создаем файл для записи текста
-    fin.close();
-    fstream fout("Result" + textPath); // Создаём объект класса ofstream для записи и связываем его с файлом
+    ofstream fText("RESULT" + textPath); // Создаем файл для записи текста
+    fText.close();
+    fstream fout("RESULT" + textPath); // Открываем файл для записи текста
+
+    ofstream finErrors("ERRORS" + textPath); // Создаем файл для записи ошибок
+    finErrors.close();
+    fstream foutErrors("ERRORS" + textPath); // Открывем файл для записи ошибок
+
     if (!fout) // Если не удалось открыть
     {
         ErrorsList.push_back("Ошибка создания файла файла Result" + textPath + " недостаточно прав для создания файла");
-
     }
     else
     {
-        for (int i = 0; i < transText.size(); i++)
+        for (int i = 0; i < transText.size(); i++) // Для каждой строки переведенного текста
         {
-            fout << transText.at(i) << endl;
+            fout << transText.at(i) << endl; // Записать в файл
         }
         fout.close(); // закрываем файл
     }
+    for (int i = 0; i < ErrorsList.size(); i++) // Для каждой строки переведенного текста
+    {
+        fout << ErrorsList.at(i) << endl; // Записать в файл
+    }
+    foutErrors.close(); // закрываем файл
 }
 
