@@ -3,18 +3,57 @@
 #pragma warning(disable:4018)
 int main(int argc, char* argv[])
 {
+    setlocale(LC_ALL, "rus");
+
+    string dictionaryPath;
+    string textPath;
+
     if (argc > 1) 
     {
-        // console mode
+        textPath = argv[1];
+        dictionaryPath = argv[2];
+        cout << textPath << endl << dictionaryPath;
     }
     else 
     {
-        // some code
+        /*cout << "Input text path" << endl;
+        cin >> textPath;
+        cout << "\nInput dictionary path" << endl;
+        cin >> dictionaryPath;*/
+        textPath = "text.txt";
+        dictionaryPath = "symbols.txt";
     }
+
+
+    vector<string> text; // Текст
+    vector<string> dictionary; // Текст
+    vector<string> ErrorsList; // Ошибки
+
+    //Проверка чтения файла
+    readText(textPath, text, ErrorsList); // Чтение текста
+
+    readDictionary(dictionaryPath, dictionary, ErrorsList); // Чтение словаря
+
+    transliterationOfText(text, dictionary); // Транслитерация текста
+
+    writeFile(text, textPath, ErrorsList); // Вывод результата
 }
 
 bool readDictionary(string& dictionaryPath, vector<string>& dictionary, vector<string>& ErrorsList)
 {
+    ifstream fDict(dictionaryPath); // Создаем файл для записи текста
+    if (!fDict)
+    {
+        ErrorsList.push_back("Ошибка открытия файла словаря" + dictionaryPath + "файл не существует или недостаточно прав доступа для его открытия");
+    }
+    else
+    {
+        string tmp; // Временная переменная для хранения текущей строки.
+        while (getline(fDict, tmp))
+        {
+            dictionary.push_back(tmp);
+        }
+    }
     return true;
 }
 
@@ -23,8 +62,21 @@ bool checkRepetition(vector<string>& dictionary, vector<string>& ErrorsList)
     return false;
 }
 
-void readText(vector<string>& textPath, vector<string>& text)
+void readText(string& textPath, vector<string>& text, vector<string>& ErrorsList)
 {
+    ifstream fText(textPath); // Считываем файл для записи текста
+    if (!fText)
+    {
+        ErrorsList.push_back("Ошибка открытия файла текста" + textPath + "файл не существует или недостаточно прав доступа для его открытия");
+    }
+    else
+    {
+        string tmp; // Временная переменная для хранения текущей строки.
+        while (getline(fText, tmp))
+        {
+            text.push_back(tmp);
+        }
+    }
 }
 
 bool transliterationOfText(vector<string> &text, vector<string>& dictionary)
@@ -61,7 +113,23 @@ bool transliterationOfText(vector<string> &text, vector<string>& dictionary)
     return true;
 }
 
-void writeFile(vector<string>& transText)
+void writeFile(vector<string>& transText, string textPath, vector<string>& ErrorsList)
 {
+    ofstream fin("Result" + textPath); // Создаем файл для записи текста
+    fin.close();
+    fstream fout("Result" + textPath); // Создаём объект класса ofstream для записи и связываем его с файлом
+    if (!fout) // Если не удалось открыть
+    {
+        ErrorsList.push_back("Ошибка создания файла файла Result" + textPath + " недостаточно прав для создания файла");
+
+    }
+    else
+    {
+        for (int i = 0; i < transText.size(); i++)
+        {
+            fout << transText.at(i) << endl;
+        }
+        fout.close(); // закрываем файл
+    }
 }
 

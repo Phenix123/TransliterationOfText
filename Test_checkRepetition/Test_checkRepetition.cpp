@@ -12,7 +12,8 @@ namespace TestcheckRepetition
 		TEST_METHOD(TestMethod1)
 		{
 			vector<string> ErrorList;
-			Assert::AreEqual(checkRepetition({ "dictionary", "is" }, ErrorList), false);
+			vector<string> dictionary;
+			Assert::AreEqual(checkRepetition(dictionary, ErrorList), false);
 		}
 	};
 }

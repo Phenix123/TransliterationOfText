@@ -11,8 +11,10 @@ namespace TestreadDictionary
 		
 		TEST_METHOD(TestMethod1)
 		{
-			std::vector<string> ErrorList;
-			Assert::AreEqual(readDictionary("file", { "dictionary", "is" }, ErrorList), true);
+			vector<string> ErrorList;
+			string dictionaryPath;
+			vector<string> dictionary;
+			Assert::AreEqual(readDictionary(dictionaryPath, dictionary, ErrorList), true);
 		}
 	};
 }

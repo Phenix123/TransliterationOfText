@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <fstream>
 using namespace std;
 
 /*
@@ -12,7 +13,7 @@ using namespace std;
 * \param[out] ErrorsList Ц массив кодов ошибок
 * \return Ц наличие ошибки
 */
-bool readDictionary(string dictionaryPath, vector<string> dictionary, vector <string> ErrorsList);
+bool readDictionary(string& dictionaryPath, vector<string>& dictionary, vector <string>& ErrorsList);
 
 /*
 * ѕроверка есть ли одинаковые сочетани€ букв в строках словар€
@@ -26,8 +27,9 @@ bool checkRepetition(vector<string>& dictionary, vector <string>& ErrorsList);
 * ѕроверка есть ли одинаковые сочетани€ букв в строках словар€
 * \param[in] textPath Ц путь к файлу текста
 * \param[in][out] text Ц переменна€, содержаща€ текст
+* \param[out] ErrorsList Ц массив кодов ошибок
 */
-void readText(vector<string>& textPath, vector<string>& text);
+void readText(string& textPath, vector<string>& text, vector<string>& ErrorsList);
 
 /*
 * ‘ункци€, транслитерирующа€ текст
@@ -40,5 +42,7 @@ bool transliterationOfText(vector<string>& text, vector<string>& dictionary);
 /*
 * ‘ункци€, создающа€ файл дл€ записи транслитерированного текста
 * \param[in] transText Ц транслитерированный текст
+* \param[in] textPath - им€ выходного файла
+* \param[out] ErrorsList Ц массив кодов ошибок
 */
-void writeFile(vector<string>& transText);
+void writeFile(vector<string>& transText, string textPath, vector<string>& ErrorsList);
