@@ -12,7 +12,7 @@ namespace TestreadDictionary
 		TEST_METHOD(TestMethod1)
 		{
 			vector<string> ErrorList;
-			string dictionaryPath;
+			string dictionaryPath = "symbols.txt";
 			vector<string> dictionary;
 			Assert::AreEqual(readDictionary(dictionaryPath, dictionary, ErrorList), true);
 		}

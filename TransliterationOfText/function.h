@@ -28,7 +28,7 @@ bool checkRepetition(vector<string>& dictionary, vector <string>& ErrorsList);
 * \param[in] textPath Ц путь к файлу текста
 * \param[in][out] text Ц переменна€, содержаща€ текст
 * \param[out] ErrorsList Ц массив кодов ошибок
-* \return Ц возможность открыть файл с текстом
+* \return Ц наличие ошибки
 */
 bool readText(string& textPath, vector<string>& text, vector<string>& ErrorsList);
 
