@@ -52,7 +52,7 @@ namespace TesttransliterationOfText
 			"Т T",
 			"У U",
 			"Ф F",
-			"Х X",
+			"Х H",
 			"Ц C",
 			"Ч Ch",
 			"Ш Sh",
@@ -70,6 +70,8 @@ namespace TesttransliterationOfText
 			vector<string> exp_string = { "привет" };
 			if (transliterationOfText(text, dictionary, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
+			else
+				Assert::Fail;
 
 			//Assert::AreEqual(transliterationOfText(text, dictionary), true);
 		}
@@ -80,6 +82,8 @@ namespace TesttransliterationOfText
 			vector<string> exp_string = { "привет", "как ты" };
 			if (transliterationOfText(text, dictionary, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
+			else
+				Assert::Fail;
 		}
 
 		TEST_METHOD(CapitalLetters)
@@ -88,6 +92,8 @@ namespace TesttransliterationOfText
 			vector<string> exp_string = { "Привет", "Как ты" };
 			if (transliterationOfText(text, dictionary, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
+			else
+				Assert::Fail;
 
 		}
 
@@ -97,6 +103,8 @@ namespace TesttransliterationOfText
 			vector<string> exp_string = { "привет.", "как ты?" };
 			if (transliterationOfText(text, dictionary, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
+			else
+				Assert::Fail;
 		}
 
 		TEST_METHOD(MultiCharacterTranslation)
@@ -105,6 +113,8 @@ namespace TesttransliterationOfText
 			vector<string> exp_string = { "Мама приготовила корж" };
 			if (transliterationOfText(text, dictionary, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
+			else
+				Assert::Fail;
 		}
 
 		TEST_METHOD(ImpossibleTransliteration)
@@ -114,14 +124,28 @@ namespace TesttransliterationOfText
 			vector<string> exp_string = { "прivet" };
 			if (!transliterationOfText(text, dict, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
+			else
+				Assert::Fail;
 		}
 
 		TEST_METHOD(WithYoSymbol)
 		{
-			vector<string> text = { "yozhik" };
-			vector<string> exp_string = { "ёжик" };
+			vector<string> text = { "Yozhik" };
+			vector<string> exp_string = { "Ёжик" };
 			if (!transliterationOfText(text, dictionary, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
+			else
+				Assert::Fail;
+		}
+
+		TEST_METHOD(WithChSymbol)
+		{
+			vector<string> text = { "Chto" };
+			vector<string> exp_string = { "Цхто" };
+			if (!transliterationOfText(text, dictionary, ErrorsList))
+				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
+			else
+				Assert::Fail;
 		}
 	};
 }

@@ -7,6 +7,12 @@
 using namespace std;
 
 /*
+* √лавна€ вычисительна€ функци€
+* \param[in] textPath Ц путь к тексту
+* \param[in] dictionaryPath Ц путь к словарю
+*/
+void transliteration(string& textPath, string& dictionaryPath);
+/*
 * „тение словар€
 * \param[in] dictionaryPath Ц ѕуть к файлу словар€
 * \param[in] dictionary Ц словарь

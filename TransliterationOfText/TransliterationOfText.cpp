@@ -15,28 +15,33 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		/*cout << "Input text path" << endl;
+		cout << "Input text path" << endl;
 		cin >> textPath;
 		cout << "\nInput dictionary path" << endl;
-		cin >> dictionaryPath;*/
-		textPath = "text.txt";
-		dictionaryPath = "symbols.txt";
+		cin >> dictionaryPath;
+		/*textPath = "1.text.txt";
+		dictionaryPath = "symbols.txt";*/
 	}
 
-	// TODO: Выделить отдельную общую функцию под нижележащие строки
+	transliteration(textPath, dictionaryPath);
+
+	return 0;
+}
+
+void transliteration(string& textPath, string& dictionaryPath)
+{
 	vector<string> text; // Исходный текст для транслитерации
 	vector<string> dictionary; // Словарь для транслитерации
 	vector<string> ErrorsList; // Массив строк с ошибками
 
-	readText(textPath, text, ErrorsList); // Чтение текста
+	bool textIsValid = !readText(textPath, text, ErrorsList); // Чтение текста
 
-	readDictionary(dictionaryPath, dictionary, ErrorsList); // Чтение словаря
+	bool DictionaryIsValid = !readDictionary(dictionaryPath, dictionary, ErrorsList); // Чтение словаря
 
-	transliterationOfText(text, dictionary, ErrorsList); // Транслитерация текста
+	if(textIsValid && DictionaryIsValid)
+		transliterationOfText(text, dictionary, ErrorsList); // Транслитерация текста
 
 	writeFile(text, textPath, ErrorsList); // Вывод результата
-
-	return 0;
 }
 
 bool readText(string& textPath, vector<string>& text, vector<string>& ErrorsList)
@@ -44,7 +49,7 @@ bool readText(string& textPath, vector<string>& text, vector<string>& ErrorsList
 	ifstream fText(textPath); // Считываем файл для записи текста
 	if (!fText)
 	{
-		ErrorsList.push_back("Ошибка открытия файла текста" + textPath + " файл не существует или недостаточно прав доступа для его открытия");
+		ErrorsList.push_back("Ошибка открытия файла текста " + textPath + " файл не существует или недостаточно прав доступа для его открытия");
 		return false;
 	}
 	else
@@ -83,26 +88,51 @@ bool readDictionary(string& dictionaryPath, vector<string>& dictionary, vector<s
 bool checkDictionary(vector<string>& dictionary, vector<string>& ErrorsList)
 {
 	int sizeBefore = ErrorsList.size();
-	if (dictionary.size() == 0)
+
+	if (dictionary.size() == 0) // Проверка на пустой словарь
 		ErrorsList.push_back("Ошибка: словарь не введен");
 	else
 	{
+
 		for (int i = 0; i < dictionary.size(); i++)
 		{
+			/* Проверка на два слова в строке */
+			if (count(dictionary.at(i).begin(), dictionary.at(i).end(), ' ') == 0)
+				ErrorsList.push_back("Ошибка: в словаре указаны изишние соответствия, в строке " + to_string(i + 1) + " излишние сочетания букв");
+
+			else if (count(dictionary.at(i).begin(), dictionary.at(i).end(), ' ') > 1)
+				ErrorsList.push_back("Ошибка: в словаре указаны не все соответствия, в строке " + to_string(i + 1) + " недостаточно сочетаний букв");
+
+			/* Проверка на то, что первый символ буква и русская буква*/
 			if (!((dictionary.at(i).at(0) >= 'а' && dictionary.at(i).at(0) <= 'я') || (dictionary.at(i).at(0) >= 'А' && dictionary.at(i).at(0) <= 'Я') || dictionary.at(i).at(0) == 'ё' || dictionary.at(i).at(0) == 'Ё'))
 			{
 				string tmp(1, dictionary.at(i).at(0));
-				ErrorsList.push_back("Ошибка: в словаре в строке " + to_string(i) + " не может быть определён'" + tmp + "'");
+				ErrorsList.push_back("Ошибка: в словаре в строке " + to_string(i + 1) + " не может быть определён '" + tmp + "'");
 			}
 
+			/* Проверка на все символы принадлежат 'а-я' 'a-z' */
 			for (int j = 0; j < dictionary.at(i).size(); j++)
 			{
 				char currSymb = dictionary.at(i).at(j);
-				if (!((currSymb >= 'а' && currSymb <= 'я') || (currSymb >= 'А' && currSymb <= 'Я') || currSymb == 'ё' || currSymb == 'Ё' || (currSymb >= 'a' && currSymb <= 'z') || (currSymb >= 'A' && currSymb <= 'Z') || currSymb == ' '));
+				bool tnp = (currSymb >= 'А' && currSymb <= 'Я');
+				if (!((currSymb >= 'а' && currSymb <= 'я') || (currSymb >= 'А' && currSymb <= 'Я') || currSymb == 'ё' || currSymb == 'Ё' || (currSymb >= 'a' && currSymb <= 'z') || (currSymb >= 'A' && currSymb <= 'Z') || currSymb == ' '))
 				{
 					string tmp(1, dictionary.at(i).at(j));
-					ErrorsList.push_back("Ошибка: в словаре в строке " + to_string(i) + " встретился неизвестный символ'" + tmp + "'");
+					ErrorsList.push_back("Ошибка: в словаре в строке " + to_string(i + 1) + " встретился неизвестный символ '" + tmp + "'");
 				}
+			}
+			if (dictionary.at(i).size() > 2)
+			{
+				int size = dictionary.at(i).size() - 2; //  Длина символа в словаре
+				string dictSymbol = dictionary.at(i).substr(2, size); // Символ в словаре
+				for (int j = 0; j < dictionary.size(); j++)
+					if (i != j && dictionary.at(j).size() > 2)
+					{
+						int currSize = dictionary.at(j).size() - 2; //  Длина символа в словаре
+						string currSymbol = dictionary.at(j).substr(2, currSize); // Символ в словаре
+						if (!dictSymbol.compare(currSymbol))
+							ErrorsList.push_back("Ошибка: буква \'" + currSymbol + "\' в строке " + to_string(i + 1) + " не может быть точно определена.");
+					}
 			}
 		}
 	}
@@ -162,7 +192,7 @@ bool transliterationOfText(vector<string>& text, vector<string>& dictionary, vec
 
 bool checkTransliteration(vector<string>& text, vector<string>& ErrorsList)
 {
-	bool isFound = true;
+	bool isFound = false;
 	for (int i = 0; i < text.size(); i++) // Для всех строк текста
 	{
 		for (int j = 0; j < text.at(i).size(); j++) // Для каждого символа
@@ -170,7 +200,7 @@ bool checkTransliteration(vector<string>& text, vector<string>& ErrorsList)
 			{
 				string tmp(1, text.at(i).at(j));
 				ErrorsList.push_back("Ошибка: Символ \'" + tmp + "\' не найден");
-				isFound = false;
+				isFound = true;
 			}
 	}
 	return isFound;
@@ -178,13 +208,13 @@ bool checkTransliteration(vector<string>& text, vector<string>& ErrorsList)
 
 void writeFile(vector<string>& transText, string textPath, vector<string>& ErrorsList)
 {
-	ofstream finText("RESULT" + textPath); // Создаем файл для записи текста
+	ofstream finText(textPath + "RESULT.txt"); // Создаем файл для записи текста
 	finText.close();
-	ofstream foutText("RESULT" + textPath); // Открываем файл для записи текста
+	ofstream foutText(textPath + "RESULT.txt"); // Открываем файл для записи текста
 
-	ofstream finErrors("ERRORS" + textPath); // Создаем файл для записи ошибок
+	ofstream finErrors(textPath + "ERRORS.txt"); // Создаем файл для записи ошибок
 	finErrors.close();
-	ofstream foutErrors("ERRORS" + textPath); // Открывем файл для записи ошибок
+	ofstream foutErrors(textPath + "ERRORS.txt"); // Открывем файл для записи ошибок
 
 	if (!foutText) // Если не удалось открыть
 	{
@@ -198,9 +228,12 @@ void writeFile(vector<string>& transText, string textPath, vector<string>& Error
 		}
 		foutText.close(); // закрываем файл
 	}
-	for (int i = 0; i < ErrorsList.size(); i++) // Для каждой строки ошибок
+	if (ErrorsList.size() > 0) 
 	{
-		foutText << ErrorsList.at(i) << endl; // Записать в файл
+		for (int i = 0; i < ErrorsList.size(); i++) // Для каждой строки ошибок
+		{
+			foutErrors << ErrorsList.at(i) << endl; // Записать в файл
+		}
 	}
 	foutErrors.close(); // закрываем файл
 }
