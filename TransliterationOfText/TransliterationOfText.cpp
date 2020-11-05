@@ -39,30 +39,6 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-bool readDictionary(string& dictionaryPath, vector<string>& dictionary, vector<string>& ErrorsList)
-{
-	ifstream fDict(dictionaryPath); // Открываем файл для записи текста
-	if (!fDict)
-	{
-		ErrorsList.push_back("Ошибка открытия файла словаря" + dictionaryPath + " файл не существует или недостаточно прав доступа для его открытия");
-		return false;
-	}
-	else
-	{
-		string tmp; // Временная переменная для хранения текущей строки.
-		while (getline(fDict, tmp))
-		{
-			dictionary.push_back(tmp);
-		}
-	}
-	return true;
-}
-
-bool checkDictionary(vector<string>& dictionary, vector<string>& ErrorsList)
-{
-	return false;
-}
-
 bool readText(string& textPath, vector<string>& text, vector<string>& ErrorsList)
 {
 	ifstream fText(textPath); // Считываем файл для записи текста
@@ -79,7 +55,60 @@ bool readText(string& textPath, vector<string>& text, vector<string>& ErrorsList
 			text.push_back(tmp);
 		}
 	}
-	return true;
+	if (text.size() == 0)
+		ErrorsList.push_back("Ошибка: текст не введен");
+
+	return ErrorsList.size() == 0 ? false : true;
+}
+
+bool readDictionary(string& dictionaryPath, vector<string>& dictionary, vector<string>& ErrorsList)
+{
+	ifstream fDict(dictionaryPath); // Открываем файл для записи текста
+	if (!fDict)
+	{
+		ErrorsList.push_back("Ошибка открытия файла словаря" + dictionaryPath + " файл не существует или недостаточно прав доступа для его открытия");
+		return false;
+	}
+	else
+	{
+		string tmp; // Временная переменная для хранения текущей строки.
+		while (getline(fDict, tmp))
+		{
+			dictionary.push_back(tmp);
+		}
+	}
+	return checkDictionary(dictionary, ErrorsList);
+}
+
+bool checkDictionary(vector<string>& dictionary, vector<string>& ErrorsList)
+{
+	int sizeBefore = ErrorsList.size();
+	if (dictionary.size() == 0)
+		ErrorsList.push_back("Ошибка: словарь не введен");
+	else
+	{
+		for (int i = 0; i < dictionary.size(); i++)
+		{
+			if (!((dictionary.at(i).at(0) >= 'а' && dictionary.at(i).at(0) <= 'я') || (dictionary.at(i).at(0) >= 'А' && dictionary.at(i).at(0) <= 'Я') || dictionary.at(i).at(0) == 'ё' || dictionary.at(i).at(0) == 'Ё'))
+			{
+				string tmp(1, dictionary.at(i).at(0));
+				ErrorsList.push_back("Ошибка: в словаре в строке " + to_string(i) + " не может быть определён'" + tmp + "'");
+			}
+
+			for (int j = 0; j < dictionary.at(i).size(); j++)
+			{
+				char currSymb = dictionary.at(i).at(j);
+				if (!((currSymb >= 'а' && currSymb <= 'я') || (currSymb >= 'А' && currSymb <= 'Я') || currSymb == 'ё' || currSymb == 'Ё' || (currSymb >= 'a' && currSymb <= 'z') || (currSymb >= 'A' && currSymb <= 'Z') || currSymb == ' '));
+				{
+					string tmp(1, dictionary.at(i).at(j));
+					ErrorsList.push_back("Ошибка: в словаре в строке " + to_string(i) + " встретился неизвестный символ'" + tmp + "'");
+				}
+			}
+		}
+	}
+	int sizeAfter = ErrorsList.size();
+
+	return sizeBefore != sizeAfter;
 }
 
 bool transliterationOfText(vector<string>& text, vector<string>& dictionary, vector<string>& ErrorsList)
@@ -118,7 +147,7 @@ bool transliterationOfText(vector<string>& text, vector<string>& dictionary, vec
 					else
 						replaceSymbol.at(0) = 'ё';
 
-					if(!symbol.compare(dictSymbol) && notFound) // Если текущая прописная буква в тексте совпадает с буквой из словаря и она не заглавная
+					if (!symbol.compare(dictSymbol) && notFound) // Если текущая прописная буква в тексте совпадает с буквой из словаря и она не заглавная
 					{
 						text.at(i).replace(k, size, replaceSymbol); // Поменять их
 						notFound = false; // Считать, что буква заменена
@@ -140,7 +169,7 @@ bool checkTransliteration(vector<string>& text, vector<string>& ErrorsList)
 			if ((text.at(i).at(j) >= 'a' && text.at(i).at(j) <= 'z') || (text.at(i).at(j) >= 'A' && text.at(i).at(j) <= 'Z')) // Если символ из английских символов
 			{
 				string tmp(1, text.at(i).at(j));
-				ErrorsList.push_back("Символ \'" + tmp + "\' не найден");
+				ErrorsList.push_back("Ошибка: Символ \'" + tmp + "\' не найден");
 				isFound = false;
 			}
 	}
