@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 
 	readDictionary(dictionaryPath, dictionary, ErrorsList); // Чтение словаря
 
-	transliterationOfText(text, dictionary); // Транслитерация текста
+	transliterationOfText(text, dictionary, ErrorsList); // Транслитерация текста
 
 	writeFile(text, textPath, ErrorsList); // Вывод результата
 
@@ -58,7 +58,7 @@ bool readDictionary(string& dictionaryPath, vector<string>& dictionary, vector<s
 	return true;
 }
 
-bool checkRepetition(vector<string>& dictionary, vector<string>& ErrorsList)
+bool checkDictionary(vector<string>& dictionary, vector<string>& ErrorsList)
 {
 	return false;
 }
@@ -82,16 +82,15 @@ bool readText(string& textPath, vector<string>& text, vector<string>& ErrorsList
 	return true;
 }
 
-bool transliterationOfText(vector<string>& text, vector<string>& dictionary)
+bool transliterationOfText(vector<string>& text, vector<string>& dictionary, vector<string>& ErrorsList)
 {
 	bool notFound; // Переведён ли текущий символ
 
 	for (int i = 0; i < text.size(); i++) // Для каждой строки
 	{
-		string str = text.at(i); // Текущая строка
-
 		for (int k = 0; k < text.at(i).size(); k++) // Для каждого символа строки
 		{
+			string str = text.at(i); // Обновить текущую строку
 			notFound = true; // Считать, что текущий символ не найден (не переведен)
 
 			for (int j = 0; j < dictionary.size() && notFound; j++) // Для каждой строки словаря
@@ -99,32 +98,53 @@ bool transliterationOfText(vector<string>& text, vector<string>& dictionary)
 				int size = dictionary.at(j).size() - 2; //  Длина символа в словаре
 				string dictSymbol = dictionary.at(j).substr(2, size); // Символ в словаре
 				string replaceSymbol = dictionary.at(j).substr(0, 1); // Заменяемый символ
+
 				if (str.size() - k - size >= 0) // Если текущая буква умещается в строке
 				{
 
 					string symbol = str.substr(k, size); // Текущий символ в тексте
 
-					if (!symbol.compare(dictSymbol)) // Если текущая буква в тексте совпадает с буквой из словаря
+					if (!symbol.compare(dictSymbol)) // Если текущая заглавная буква в тексте совпадает с буквой из словаря
 					{
 						text.at(i).replace(k, size, replaceSymbol); // Поменять их
 						notFound = false; // Считать, что буква заменена
 					}
+
+					symbol.at(0) = tolower(symbol.at(0)); // Перевести текущий символ в нижний регистр
+					dictSymbol.at(0) = tolower(dictSymbol.at(0)); // Перевсти символ из словаря в нижний регистр
+
+					if (replaceSymbol.at(0) != 'Ё') // Перевести в нижний регистр заменяемый символ
+						replaceSymbol.at(0) = replaceSymbol.at(0) + 32;
+					else
+						replaceSymbol.at(0) = 'ё';
+
+					if(!symbol.compare(dictSymbol) && notFound) // Если текущая прописная буква в тексте совпадает с буквой из словаря и она не заглавная
+					{
+						text.at(i).replace(k, size, replaceSymbol); // Поменять их
+						notFound = false; // Считать, что буква заменена
+					}
+
 				}
 			}
 		}
 	}
-	return checkTransliteration(text);
+	return checkTransliteration(text, ErrorsList);
 }
 
-bool checkTransliteration(vector<string>& text)
+bool checkTransliteration(vector<string>& text, vector<string>& ErrorsList)
 {
+	bool isFound = true;
 	for (int i = 0; i < text.size(); i++) // Для всех строк текста
 	{
 		for (int j = 0; j < text.at(i).size(); j++) // Для каждого символа
 			if ((text.at(i).at(j) >= 'a' && text.at(i).at(j) <= 'z') || (text.at(i).at(j) >= 'A' && text.at(i).at(j) <= 'Z')) // Если символ из английских символов
-				return false;
+			{
+				string tmp(1, text.at(i).at(j));
+				ErrorsList.push_back("Символ \'" + tmp + "\' не найден");
+				isFound = false;
+			}
 	}
-	return true;
+	return isFound;
 }
 
 void writeFile(vector<string>& transText, string textPath, vector<string>& ErrorsList)

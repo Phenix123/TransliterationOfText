@@ -21,7 +21,7 @@ bool readDictionary(string& dictionaryPath, vector<string>& dictionary, vector <
 * \param[in][out] ErrorsList Ц массив кодов ошибок
 * \return Ц существуют ли повтор€ющиес€ символы
 */
-bool checkRepetition(vector<string>& dictionary, vector <string>& ErrorsList);
+bool checkDictionary(vector<string>& dictionary, vector <string>& ErrorsList);
 
 /*
 * ѕроверка есть ли одинаковые сочетани€ букв в строках словар€
@@ -36,16 +36,18 @@ bool readText(string& textPath, vector<string>& text, vector<string>& ErrorsList
 * ‘ункци€, транслитерирующа€ текст
 * \param[in] text Ц текст дл€ транслитерации
 * \param[in] dictionary Ц словарь
+* \param[out] ErrorsList Ц массив кодов ошибок
 * \return Ц возможность произвести транслитерацию
 */
-bool transliterationOfText(vector<string>& text, vector<string>& dictionary);
+bool transliterationOfText(vector<string>& text, vector<string>& dictionary, vector<string>& ErrorsList);
 
 /*
 * ѕровер€ет, все ли символы были переведены
 * \param[in] text Ц текст дл€ проверки
+* \param[out] ErrorsList Ц массив кодов ошибок
 * \return Ц возможность произвести транслитерацию
 */
-bool checkTransliteration(vector<string>& text);
+bool checkTransliteration(vector<string>& text, vector<string>& ErrorsList);
 
 /*
 * ‘ункци€, создающа€ файл дл€ записи транслитерированного текста

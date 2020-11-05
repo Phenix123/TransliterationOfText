@@ -28,47 +28,47 @@ namespace TesttransliterationOfText
 			return true;
 		}
 	public:
-		//{ "a b v g d yo e zh z i j k l m n o p r s t u f x c ch sh shh ' y '' eh yu ya", "а б в г д е ё ж х и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я" };
+		vector<string> ErrorsList;//{ "a b v g d yo e zh z i j k l m n o p r s t u f x c ch sh shh ' y '' eh yu ya", "а б в г д е ё ж х и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я" };
 		vector<string> dictionary =
-		{ "а a",
-			"б b",
-			"в v",
-			"г g",
-			"д d",
-			"е e",
-			"ё yo",
-			"ж zh",
-			"з z",
-			"и i",
-			"й j",
-			"к k",
-			"л l",
-			"м m",
-			"н n",
-			"о o",
-			"п p",
-			"р r",
-			"с s",
-			"т t",
-			"у u",
-			"ф f",
-			"х x",
-			"ц c",
-			"ч ch",
-			"ш sh",
-			"щ shh",
-			"ъ ''",
-			"ы y",
-			"ь '",
-			"э eh",
-			"ю yu",
-			"я ya",
+		{   "А A",
+			"Б B",
+			"В V",
+			"Г G",
+			"Д D",
+			"Е E",
+			"Ё Yo",
+			"Ж Zh",
+			"З Z",
+			"И I",
+			"Й J",
+			"К K",
+			"Л L",
+			"М M",
+			"Н N",
+			"О O",
+			"П P",
+			"Р R",
+			"С S",
+			"Т T",
+			"У U",
+			"Ф F",
+			"Х X",
+			"Ц C",
+			"Ч Ch",
+			"Ш Sh",
+			"Щ Shh",
+			"Ъ Bb",
+			"Ы Y",
+			"Ь Dd",
+			"Э Eh",
+			"Ю Yu",
+			"Я Ya",
 		};
 		TEST_METHOD(SimpleWord)
 		{
 			vector<string> text = { "privet" };
 			vector<string> exp_string = { "привет" };
-			if (transliterationOfText(text, dictionary))
+			if (transliterationOfText(text, dictionary, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
 
 			//Assert::AreEqual(transliterationOfText(text, dictionary), true);
@@ -78,7 +78,7 @@ namespace TesttransliterationOfText
 		{
 			vector<string> text = { "privet", "kak ty" }; 
 			vector<string> exp_string = { "привет", "как ты" };
-			if (transliterationOfText(text, dictionary))
+			if (transliterationOfText(text, dictionary, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
 		}
 
@@ -86,7 +86,7 @@ namespace TesttransliterationOfText
 		{
 			vector<string> text = { "Privet", "Kak ty" };
 			vector<string> exp_string = { "Привет", "Как ты" };
-			if (transliterationOfText(text, dictionary))
+			if (transliterationOfText(text, dictionary, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
 
 		}
@@ -95,24 +95,32 @@ namespace TesttransliterationOfText
 		{
 			vector<string> text = { "privet.", "kak ty?" };
 			vector<string> exp_string = { "привет.", "как ты?" };
-			if (transliterationOfText(text, dictionary))
+			if (transliterationOfText(text, dictionary, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
 		}
 
 		TEST_METHOD(MultiCharacterTranslation)
 		{
-			vector<string> text = { "Mama progotovila korzh" };
+			vector<string> text = { "Mama prigotovila korzh" };
 			vector<string> exp_string = { "Мама приготовила корж" };
-			if (transliterationOfText(text, dictionary))
+			if (transliterationOfText(text, dictionary, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
 		}
 
 		TEST_METHOD(ImpossibleTransliteration)
 		{
-			vector<string> dict = {"п p", "р r"};
+			vector<string> dict = {"П P", "Р R"};
 			vector<string> text = { "privet" };
 			vector<string> exp_string = { "прivet" };
-			if (!transliterationOfText(text, dict))
+			if (!transliterationOfText(text, dict, ErrorsList))
+				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
+		}
+
+		TEST_METHOD(WithYoSymbol)
+		{
+			vector<string> text = { "yozhik" };
+			vector<string> exp_string = { "ёжик" };
+			if (!transliterationOfText(text, dictionary, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
 		}
 	};

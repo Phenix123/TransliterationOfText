@@ -16,5 +16,21 @@ namespace TestreadDictionary
 			vector<string> dictionary;
 			Assert::AreEqual(readDictionary(dictionaryPath, dictionary, ErrorList), true);
 		}
+
+		TEST_METHOD(TestMethod2)
+		{
+			vector<string> ErrorList;
+			string dictionaryPath = "symbols.txt";
+			vector<string> dictionary;
+			Assert::AreEqual(readDictionary(dictionaryPath, dictionary, ErrorList), true);
+		}
+
+		TEST_METHOD(TestMethod3)
+		{
+			vector<string> ErrorList;
+			string dictionaryPath = "symbols.txt";
+			vector<string> dictionary;
+			Assert::AreEqual(readDictionary(dictionaryPath, dictionary, ErrorList), true);
+		}
 	};
 }
