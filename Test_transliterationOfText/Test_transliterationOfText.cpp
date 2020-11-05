@@ -68,7 +68,7 @@ namespace TesttransliterationOfText
 		{
 			vector<string> text = { "privet" };
 			vector<string> exp_string = { "привет" };
-			if (transliterationOfText(text, dictionary), true)
+			if (transliterationOfText(text, dictionary))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
 
 			//Assert::AreEqual(transliterationOfText(text, dictionary), true);
@@ -78,7 +78,7 @@ namespace TesttransliterationOfText
 		{
 			vector<string> text = { "privet", "kak ty" }; 
 			vector<string> exp_string = { "привет", "как ты" };
-			if (transliterationOfText(text, dictionary), true)
+			if (transliterationOfText(text, dictionary))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
 		}
 
@@ -86,7 +86,7 @@ namespace TesttransliterationOfText
 		{
 			vector<string> text = { "Privet", "Kak ty" };
 			vector<string> exp_string = { "Привет", "Как ты" };
-			if (transliterationOfText(text, dictionary), true)
+			if (transliterationOfText(text, dictionary))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
 
 		}
@@ -95,7 +95,7 @@ namespace TesttransliterationOfText
 		{
 			vector<string> text = { "privet.", "kak ty?" };
 			vector<string> exp_string = { "привет.", "как ты?" };
-			if (transliterationOfText(text, dictionary), true)
+			if (transliterationOfText(text, dictionary))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
 		}
 
@@ -103,7 +103,16 @@ namespace TesttransliterationOfText
 		{
 			vector<string> text = { "Mama progotovila korzh" };
 			vector<string> exp_string = { "Мама приготовила корж" };
-			if (transliterationOfText(text, dictionary), true)
+			if (transliterationOfText(text, dictionary))
+				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
+		}
+
+		TEST_METHOD(ImpossibleTransliteration)
+		{
+			vector<string> dict = {"п p", "р r"};
+			vector<string> text = { "privet" };
+			vector<string> exp_string = { "прivet" };
+			if (!transliterationOfText(text, dict))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
 		}
 	};

@@ -41,6 +41,13 @@ bool readText(string& textPath, vector<string>& text, vector<string>& ErrorsList
 bool transliterationOfText(vector<string>& text, vector<string>& dictionary);
 
 /*
+* ѕровер€ет, все ли символы были переведены
+* \param[in] text Ц текст дл€ проверки
+* \return Ц возможность произвести транслитерацию
+*/
+bool checkTransliteration(vector<string>& text);
+
+/*
 * ‘ункци€, создающа€ файл дл€ записи транслитерированного текста
 * \param[in] transText Ц транслитерированный текст
 * \param[in] textPath - им€ выходного файла

@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include "function.h"
 #pragma warning(disable:4018)
+
 int main(int argc, char* argv[])
 {
 	setlocale(LC_ALL, "rus");
@@ -111,6 +112,17 @@ bool transliterationOfText(vector<string>& text, vector<string>& dictionary)
 				}
 			}
 		}
+	}
+	return checkTransliteration(text);
+}
+
+bool checkTransliteration(vector<string>& text)
+{
+	for (int i = 0; i < text.size(); i++) // Для всех строк текста
+	{
+		for (int j = 0; j < text.at(i).size(); j++) // Для каждого символа
+			if ((text.at(i).at(j) >= 'a' && text.at(i).at(j) <= 'z') || (text.at(i).at(j) >= 'A' && text.at(i).at(j) <= 'Z')) // Если символ из английских символов
+				return false;
 	}
 	return true;
 }
