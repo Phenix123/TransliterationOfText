@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 	{
 		cout << "Input text path" << endl;
 		cin >> textPath;
-		cout << "\nInput dictionary path" << endl;
+		cout << "Input dictionary path" << endl;
 		cin >> dictionaryPath;
 		/*textPath = "1.text.txt";
 		dictionaryPath = "symbols.txt";*/
@@ -36,9 +36,9 @@ void transliteration(string& textPath, string& dictionaryPath)
 
 	bool textIsValid = !readText(textPath, text, ErrorsList); // Чтение текста
 
-	bool DictionaryIsValid = !readDictionary(dictionaryPath, dictionary, ErrorsList); // Чтение словаря
+	bool dictionaryIsValid = !readDictionary(dictionaryPath, dictionary, ErrorsList); // Чтение словаря
 
-	if(textIsValid && DictionaryIsValid)
+	if(textIsValid && dictionaryIsValid)
 		transliterationOfText(text, dictionary, ErrorsList); // Транслитерация текста
 
 	writeFile(text, textPath, ErrorsList); // Вывод результата
@@ -61,7 +61,7 @@ bool readText(string& textPath, vector<string>& text, vector<string>& ErrorsList
 		}
 	}
 	if (text.size() == 0)
-		ErrorsList.push_back("Ошибка: текст не введен");
+		ErrorsList.push_back("Ошибка: Текст не введен");
 
 	return ErrorsList.size() == 0 ? false : true;
 }
@@ -71,7 +71,7 @@ bool readDictionary(string& dictionaryPath, vector<string>& dictionary, vector<s
 	ifstream fDict(dictionaryPath); // Открываем файл для записи текста
 	if (!fDict)
 	{
-		ErrorsList.push_back("Ошибка открытия файла словаря" + dictionaryPath + " файл не существует или недостаточно прав доступа для его открытия");
+		ErrorsList.push_back("Ошибка открытия файла словаря " + dictionaryPath + " файл не существует или недостаточно прав доступа для его открытия");
 		return false;
 	}
 	else
@@ -208,12 +208,12 @@ bool checkTransliteration(vector<string>& text, vector<string>& ErrorsList)
 
 void writeFile(vector<string>& transText, string textPath, vector<string>& ErrorsList)
 {
-	ofstream finText(textPath + "RESULT.txt"); // Создаем файл для записи текста
-	finText.close();
+	//ofstream finText(textPath + "RESULT.txt"); // Создаем файл для записи текста
+	//finText.close();
 	ofstream foutText(textPath + "RESULT.txt"); // Открываем файл для записи текста
 
-	ofstream finErrors(textPath + "ERRORS.txt"); // Создаем файл для записи ошибок
-	finErrors.close();
+	//ofstream finErrors(textPath + "ERRORS.txt"); // Создаем файл для записи ошибок
+	//finErrors.close();
 	ofstream foutErrors(textPath + "ERRORS.txt"); // Открывем файл для записи ошибок
 
 	if (!foutText) // Если не удалось открыть
