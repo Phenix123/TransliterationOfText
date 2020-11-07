@@ -97,10 +97,10 @@ bool checkDictionary(vector<string>& dictionary, vector<string>& ErrorsList)
 		for (int i = 0; i < dictionary.size(); i++)
 		{
 			/* Проверка на два слова в строке */
-			if (count(dictionary.at(i).begin(), dictionary.at(i).end(), ' ') == 0)
-				ErrorsList.push_back("Ошибка: в словаре указаны изишние соответствия, в строке " + to_string(i + 1) + " излишние сочетания букв");
+			if (count(dictionary.at(i).begin(), dictionary.at(i).end(), ' ') > 1)
+				ErrorsList.push_back("Ошибка: в словаре указаны излишние соответствия, в строке " + to_string(i + 1) + " излишние сочетания букв");
 
-			else if (count(dictionary.at(i).begin(), dictionary.at(i).end(), ' ') > 1)
+			else if (count(dictionary.at(i).begin(), dictionary.at(i).end(), ' ') == 0)
 				ErrorsList.push_back("Ошибка: в словаре указаны не все соответствия, в строке " + to_string(i + 1) + " недостаточно сочетаний букв");
 
 			/* Проверка на то, что первый символ буква и русская буква*/

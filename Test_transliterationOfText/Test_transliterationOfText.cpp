@@ -68,32 +68,30 @@ namespace TesttransliterationOfText
 		{
 			vector<string> text = { "privet" };
 			vector<string> exp_string = { "привет" };
-			if (transliterationOfText(text, dictionary, ErrorsList))
+			if (!transliterationOfText(text, dictionary, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
 			else
-				Assert::Fail;
-
-			//Assert::AreEqual(transliterationOfText(text, dictionary), true);
+				Assert::Fail();
 		}
 
 		TEST_METHOD(MultipleLines)
 		{
 			vector<string> text = { "privet", "kak ty" }; 
 			vector<string> exp_string = { "привет", "как ты" };
-			if (transliterationOfText(text, dictionary, ErrorsList))
+			if (!transliterationOfText(text, dictionary, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
 			else
-				Assert::Fail;
+				Assert::Fail();
 		}
 
 		TEST_METHOD(CapitalLetters)
 		{
 			vector<string> text = { "Privet", "Kak ty" };
 			vector<string> exp_string = { "Привет", "Как ты" };
-			if (transliterationOfText(text, dictionary, ErrorsList))
+			if (!transliterationOfText(text, dictionary, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
 			else
-				Assert::Fail;
+				Assert::Fail();
 
 		}
 
@@ -101,20 +99,20 @@ namespace TesttransliterationOfText
 		{
 			vector<string> text = { "privet.", "kak ty?" };
 			vector<string> exp_string = { "привет.", "как ты?" };
-			if (transliterationOfText(text, dictionary, ErrorsList))
+			if (!transliterationOfText(text, dictionary, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
 			else
-				Assert::Fail;
+				Assert::Fail();
 		}
 
 		TEST_METHOD(MultiCharacterTranslation)
 		{
 			vector<string> text = { "Mama prigotovila korzh" };
 			vector<string> exp_string = { "Мама приготовила корж" };
-			if (transliterationOfText(text, dictionary, ErrorsList))
+			if (!transliterationOfText(text, dictionary, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
 			else
-				Assert::Fail;
+				Assert::Fail();
 		}
 
 		TEST_METHOD(ImpossibleTransliteration)
@@ -122,10 +120,10 @@ namespace TesttransliterationOfText
 			vector<string> dict = {"П P", "Р R"};
 			vector<string> text = { "privet" };
 			vector<string> exp_string = { "прivet" };
-			if (!transliterationOfText(text, dict, ErrorsList))
+			if (transliterationOfText(text, dict, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
 			else
-				Assert::Fail;
+				Assert::Fail();
 		}
 
 		TEST_METHOD(WithYoSymbol)
@@ -135,7 +133,7 @@ namespace TesttransliterationOfText
 			if (!transliterationOfText(text, dictionary, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
 			else
-				Assert::Fail;
+				Assert::Fail();
 		}
 
 		TEST_METHOD(WithChSymbol)
@@ -145,7 +143,7 @@ namespace TesttransliterationOfText
 			if (!transliterationOfText(text, dictionary, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
 			else
-				Assert::Fail;
+				Assert::Fail();
 		}
 	};
 }
