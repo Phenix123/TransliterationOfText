@@ -8,23 +8,18 @@ int main(int argc, char* argv[])
 	string dictionaryPath; // Путь к словарю
 	string textPath; // Путь к исходному тексту
 
-	if (argc > 1)
+	if (argc == 3)
 	{
 		textPath = argv[1];
 		dictionaryPath = argv[2];
+		transliteration(textPath, dictionaryPath);
 	}
+
 	else
 	{
-		cout << "Input text path" << endl;
-		cin >> textPath;
-		cout << "Input dictionary path" << endl;
-		cin >> dictionaryPath;
-		/*textPath = "1.text.txt";
-		dictionaryPath = "symbols.txt";*/
+		cout << "Number of launch parameters is not 3" << endl;
 	}
-
-	transliteration(textPath, dictionaryPath);
-
+	
 	return 0;
 }
 
