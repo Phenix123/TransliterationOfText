@@ -6,59 +6,60 @@
 #include <fstream>
 using namespace std;
 
-/*
-* Главная вычисительная функция
-* \param[in] textPath – путь к тексту
-* \param[in] dictionaryPath – путь к словарю
+/*!
+*\brief Главная вычисительная функция
+*\param[in] textPath – путь к тексту
+*\param[in] dictionaryPath – путь к словарю
 */
 void transliteration(string& textPath, string& dictionaryPath);
-/*
-* Чтение словаря
-* \param[in] dictionaryPath – Путь к файлу словаря
-* \param[in] dictionary – словарь
-* \param[out] ErrorsList – массив кодов ошибок
-* \return – наличие ошибки
+
+/*! 
+*\brief Чтение словаря
+*\param[in] dictionaryPath – Путь к файлу словаря
+*\param[in] dictionary – словарь
+*\param[out] ErrorsList – массив кодов ошибок
+*\return – наличие ошибки
 */
 bool readDictionary(string& dictionaryPath, vector<string>& dictionary, vector <string>& ErrorsList);
 
-/*
-* Проверка есть ли одинаковые сочетания букв в строках словаря
-* \param[in] dictionary – словарь
-* \param[out] ErrorsList – массив кодов ошибок
-* \return – существуют ли повторяющиеся символы
+/*!
+*\brief Проверка есть ли одинаковые сочетания букв в строках словаря
+*\param[in] dictionary – словарь
+*\param[out] ErrorsList – массив кодов ошибок
+*\return – существуют ли повторяющиеся символы
 */
 bool checkDictionary(vector<string>& dictionary, vector <string>& ErrorsList);
 
-/*
-* Проверка есть ли одинаковые сочетания букв в строках словаря
-* \param[in] textPath – путь к файлу текста
-* \param[in][out] text – переменная, содержащая текст
-* \param[out] ErrorsList – массив кодов ошибок
-* \return – наличие ошибки
+/*!
+*\brief Проверка есть ли одинаковые сочетания букв в строках словаря
+*\param[in] textPath – путь к файлу текста
+*\param[in, out] text – переменная, содержащая текст
+*\param[out] ErrorsList – массив кодов ошибок
+*\return – наличие ошибки
 */
 bool readText(string& textPath, vector<string>& text, vector<string>& ErrorsList);
 
-/*
-* Функция, транслитерирующая текст
-* \param[in][out] text – текст для транслитерации
-* \param[in] dictionary – словарь
-* \param[out] ErrorsList – массив кодов ошибок
-* \return – возможность произвести транслитерацию
+/*!
+*\brief Функция, транслитерирующая текст
+*\param[in, out] text – текст для транслитерации
+*\param[in] dictionary – словарь
+*\param[out] ErrorsList – массив кодов ошибок
+*\return – возможность произвести транслитерацию
 */
 bool transliterationOfText(vector<string>& text, vector<string>& dictionary, vector<string>& ErrorsList);
 
-/*
-* Проверяет, все ли символы были переведены
-* \param[in] text – текст для проверки
-* \param[out] ErrorsList – массив кодов ошибок
-* \return – возможность произвести транслитерацию
+/*!
+*\brief Проверяет, все ли символы были переведены
+*\param[in] text – текст для проверки
+*\param[out] ErrorsList – массив кодов ошибок
+*\return – возможность произвести транслитерацию
 */
 bool checkTransliteration(vector<string>& text, vector<string>& ErrorsList);
 
-/*
-* Функция, создающая файл для записи транслитерированного текста
-* \param[in] transText – транслитерированный текст
-* \param[in] textPath - имя выходного файла
-* \param[in] ErrorsList – массив кодов ошибок
+/*!
+*\brief Функция, создающая файл для записи транслитерированного текста
+*\param[in] transText – транслитерированный текст
+*\param[in] textPath - имя выходного файла
+*\param[in] ErrorsList – массив кодов ошибок
 */
 void writeFile(vector<string>& transText, string textPath, vector<string>& ErrorsList);

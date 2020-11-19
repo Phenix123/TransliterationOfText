@@ -1,4 +1,15 @@
-﻿#include <iostream>
+﻿/*!
+*\mainpage Transliteration Of Text
+*\brief Обратная транслитерация текста с латиницы на русский
+*\author Курляк Д. В. ПрИн-267
+*\date Июнь 2020 года
+*/
+
+/*!
+*\file TransliterationOfText.cpp
+*/
+#include <iostream>
+#include <algorithm>
 #include "function.h"
 #pragma warning(disable:4018)
 
@@ -13,6 +24,7 @@ int main(int argc, char* argv[])
 		textPath = argv[1];
 		dictionaryPath = argv[2];
 		transliteration(textPath, dictionaryPath);
+		cout << "Done";
 	}
 
 	else
@@ -77,7 +89,13 @@ bool readDictionary(string& dictionaryPath, vector<string>& dictionary, vector<s
 			dictionary.push_back(tmp);
 		}
 	}
-	return checkDictionary(dictionary, ErrorsList);
+	bool validDictionary = checkDictionary(dictionary, ErrorsList);
+
+	sort(dictionary.begin(), dictionary.end(), [](const auto& a, const auto& b) { // Сортировка словаря
+		return a.length() > b.length();
+	});
+
+	return validDictionary;
 }
 
 bool checkDictionary(vector<string>& dictionary, vector<string>& ErrorsList)
@@ -209,7 +227,7 @@ void writeFile(vector<string>& transText, string textPath, vector<string>& Error
 
 	//ofstream finErrors(textPath + "ERRORS.txt"); // Создаем файл для записи ошибок
 	//finErrors.close();
-	ofstream foutErrors(textPath + "ERRORS.txt"); // Открывем файл для записи ошибок
+	
 
 	if (!foutText) // Если не удалось открыть
 	{
@@ -225,11 +243,15 @@ void writeFile(vector<string>& transText, string textPath, vector<string>& Error
 	}
 	if (ErrorsList.size() > 0) 
 	{
+		ofstream foutErrors(textPath + "ERRORS.txt"); // Открывем файл для записи ошибок
+
 		for (int i = 0; i < ErrorsList.size(); i++) // Для каждой строки ошибок
 		{
 			foutErrors << ErrorsList.at(i) << endl; // Записать в файл
 		}
+	
+		foutErrors.close(); // закрываем файл
 	}
-	foutErrors.close(); // закрываем файл
+
 }
 

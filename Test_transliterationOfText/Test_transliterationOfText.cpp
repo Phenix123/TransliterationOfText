@@ -30,14 +30,23 @@ namespace TesttransliterationOfText
 	public:
 		vector<string> ErrorsList;//{ "a b v g d yo e zh z i j k l m n o p r s t u f x c ch sh shh ' y '' eh yu ya", "а б в г д е ё ж х и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я" };
 		vector<string> dictionary =
-		{   "А A",
+		{	
+			"Щ Shh",
+			"Ч Ch",
+			"Ш Sh",
+			"Ъ Bb",
+			"Ь Dd",
+			"Э Eh",
+			"Ю Yu",
+			"Я Ya",
+			"Ё Yo",
+			"Ж Zh",
+			"А A",
 			"Б B",
 			"В V",
 			"Г G",
 			"Д D",
 			"Е E",
-			"Ё Yo",
-			"Ж Zh",
 			"З Z",
 			"И I",
 			"Й J",
@@ -53,16 +62,8 @@ namespace TesttransliterationOfText
 			"У U",
 			"Ф F",
 			"Х H",
-			"Ц C",
-			"Ч Ch",
-			"Ш Sh",
-			"Щ Shh",
-			"Ъ Bb",
 			"Ы Y",
-			"Ь Dd",
-			"Э Eh",
-			"Ю Yu",
-			"Я Ya",
+			"Ц C"
 		};
 		TEST_METHOD(SimpleWord)
 		{
@@ -139,7 +140,17 @@ namespace TesttransliterationOfText
 		TEST_METHOD(WithChSymbol)
 		{
 			vector<string> text = { "Chto" };
-			vector<string> exp_string = { "Цхто" };
+			vector<string> exp_string = { "Что" };
+			if (!transliterationOfText(text, dictionary, ErrorsList))
+				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
+			else
+				Assert::Fail();
+		}
+
+		TEST_METHOD(WithShhSymbol)
+		{
+			vector<string> text = { "Sh Shh" };
+			vector<string> exp_string = { "Ш Щ" };
 			if (!transliterationOfText(text, dictionary, ErrorsList))
 				Assert::AreEqual(vectorAreEqual(text, exp_string), true);
 			else
